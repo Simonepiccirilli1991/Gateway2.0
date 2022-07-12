@@ -9,6 +9,14 @@ public enum ActionConstants {
 	CHECKOTPMAIL(3),
 	CREAZIONEPIN(4),
 	CAMBIOPIN(5),
+	
+	REGISTRATI(6),
+	ANAGRAFICA(7),
+	SICUREZZA(8),
+	
+	ENFORCEMENT(9),
+	CONSENT(),
+	STATUS(),
 
 
 	
