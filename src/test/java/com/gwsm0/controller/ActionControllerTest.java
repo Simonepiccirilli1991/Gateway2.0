@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import org.springframework.http.HttpHeaders;
 
 import com.gwsm0.model.request.StatusRequest;
 import com.gwsm0.model.response.StatusResponse;
@@ -24,7 +24,7 @@ public class ActionControllerTest {
 	
 	@Mock StatusWiam statusWiam;
 	
-	@Autowired StatusService statusService;
+	@Mock StatusService statusService;
 	
 	
 	
@@ -38,6 +38,8 @@ public class ActionControllerTest {
 		
 		
 		StatusRequest request = new StatusRequest();
+		// Mocko status principale per vedere se gira
+		when(statusService.call_(ArgumentMatchers.any(StatusRequest.class), any(HttpHeaders.class))).thenReturn(response);
 		
 		when(statusWiam.statusW(ArgumentMatchers.any(StatusRequest.class))).thenReturn(response);
 		//TODO capire per quale cazzo di motivo ogni volta che chiamo il servici nn torna oggetto dovuto
