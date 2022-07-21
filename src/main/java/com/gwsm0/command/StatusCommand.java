@@ -12,7 +12,7 @@ public class StatusCommand extends BaseActionCommand<StatusRequest, StatusRespon
 		super(iRequest, httpHeaders);
 	}
 		public StatusResponse doExcute() throws Exception{
-			
+			// TODO da testare
 			switch (super.iRequest.getAction()) {
 			// chiama alla status di wiam
 				case STATUS:

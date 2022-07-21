@@ -15,7 +15,7 @@ public class StatusWiam {
 	
 	public StatusResponse  statusW(StatusRequest request) {
 		
-		StatusResponse response = null;
+		StatusResponse response = new StatusResponse();
 		try {
 			String fooResourceUrl
 			= "http://localhost:8081/wiam/status";

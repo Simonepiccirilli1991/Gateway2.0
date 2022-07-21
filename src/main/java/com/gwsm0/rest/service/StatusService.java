@@ -13,7 +13,7 @@ import com.gwsm0.rest.fragment.wiam.StatusWiam;
 @Service
 public class StatusService extends BaseActionService<StatusRequest, StatusResponse>{
 
-	@Autowired StatusWiam statusW;
+	@Autowired private StatusWiam statusW;
 	
 	@Override
 	public StatusResponse call_(StatusRequest iRequest, HttpHeaders httpHeaders) {
@@ -24,7 +24,7 @@ public class StatusService extends BaseActionService<StatusRequest, StatusRespon
 		// se utente non registarto action registrati
 		if(!response.isUtenteRegistrato()) {
 			response.setAction(ActionConstants.REGISTRATI);
-			response.getSessionData().getSession().setActionId(ActionConstants.REGISTRATI.getId());
+			//response.getSessionData().getSession().setActionId(ActionConstants.REGISTRATI.getId());
 			return response;
 		}
 		// se utente non ha anagrafica
