@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.gwsm0.model.base.BaseActionService;
 import com.gwsm0.model.request.PinRequest;
-import com.gwsm0.model.request.PinResponse;
+import com.gwsm0.model.response.PinResponse;
 
 @Service
 public class CheckPinService extends BaseActionService<PinRequest, PinResponse>{

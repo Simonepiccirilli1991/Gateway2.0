@@ -4,35 +4,39 @@ import com.gwsm0.model.base.BaseActionResponse;
 
 public class StatusResponse extends BaseActionResponse{
 
-	private boolean utenteRegistrato;
-	private boolean anagragicaP;
-	private boolean enforced;
-	private boolean sicuriro;
+	private Boolean utenteRegistrato;
+	private Boolean anagragicaP;
+	private Boolean enforced;
+	private Boolean sicuriro;
 	
-	public boolean isUtenteRegistrato() {
+	public Boolean getUtenteRegistrato() {
 		return utenteRegistrato;
 	}
-	public void setUtenteRegistrato(boolean utenteRegistrato) {
+	public void setUtenteRegistrato(Boolean utenteRegistrato) {
 		this.utenteRegistrato = utenteRegistrato;
 	}
-	public boolean isAnagragicaP() {
+	public Boolean getAnagragicaP() {
 		return anagragicaP;
 	}
-	public void setAnagragicaP(boolean anagragicaP) {
+	public void setAnagragicaP(Boolean anagragicaP) {
 		this.anagragicaP = anagragicaP;
 	}
-	public boolean isEnforced() {
+	public Boolean getEnforced() {
 		return enforced;
 	}
-	public void setEnforced(boolean enforced) {
+	public void setEnforced(Boolean enforced) {
 		this.enforced = enforced;
 	}
-	public boolean isSicuriro() {
+	public Boolean getSicuriro() {
 		return sicuriro;
 	}
-	public void setSicuriro(boolean sicuriro) {
+	public void setSicuriro(Boolean sicuriro) {
 		this.sicuriro = sicuriro;
 	}
+	
+	
+	
+	
 	
 	
 }
