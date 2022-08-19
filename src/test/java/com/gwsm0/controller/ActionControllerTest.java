@@ -18,10 +18,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
+import com.gwsm0.fragment.model.wiam.EnforcementWRequest;
+import com.gwsm0.fragment.model.wiam.EnforcementWResponse;
 import com.gwsm0.fragment.model.wiam.StatusWResponse;
+import com.gwsm0.model.request.EnforcementRequest;
 import com.gwsm0.model.request.StatusRequest;
+import com.gwsm0.model.response.EnforcementResponse;
 import com.gwsm0.model.response.StatusResponse;
+import com.gwsm0.rest.fragment.wiam.EnforcementWiam;
 import com.gwsm0.rest.fragment.wiam.StatusWiam;
+import com.gwsm0.rest.service.EnforcementService;
 import com.gwsm0.rest.service.StatusService;
 
 @SpringBootTest
@@ -32,9 +38,14 @@ public class ActionControllerTest {
 	@Autowired protected MockMvc mvc;
 	@InjectMocks StatusService statusService;
 	@Mock RestTemplate rt;
+	@Mock
+	EnforcementWiam enforcement;
+	@InjectMocks 
+	EnforcementService enforcementSer;
 	
 	
-	@Test
+	
+	//@Test
 	public void statusOK() throws Exception {
 		
 		StatusWResponse r = new StatusWResponse();
@@ -53,6 +64,27 @@ public class ActionControllerTest {
 		response = statusService.call_(request, null);
 		
 		assertThat(response.getAction()).isSameAs("ANAGRAFICA");
+	}
+	
+	@Test
+	public void enforcementOk() {
+		
+		EnforcementWResponse oResponse = new EnforcementWResponse();
+		oResponse.setCodiceEsito("ok");
+		oResponse.setSeed("seed");
+		oResponse.setTokenRicordami("token");
+		
+		EnforcementRequest request = new EnforcementRequest();
+		EnforcementResponse response = new EnforcementResponse();
+		
+		Mockito.when(enforcement.enforcement(any(EnforcementWRequest.class))).thenReturn(oResponse);
+		
+		response = enforcementSer.enforcement(request);
+		
+		assertThat(response.getTokenRicordami()).isSameAs("token");
+		assertThat(response.getSeedEnforcement()).isSameAs("seed");
+		assertThat(response.getMsgResponse()).isSameAs("ENFORCEMENT AVVENUTO CON SUCCESSO");
+
 	}
 
 }
