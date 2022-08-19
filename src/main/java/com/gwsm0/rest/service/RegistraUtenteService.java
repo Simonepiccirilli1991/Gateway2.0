@@ -29,7 +29,7 @@ public class RegistraUtenteService extends BaseActionService<UtenteRequest, Base
 		if(response.getIsError()) {
 			throw new BaseActionException(response.getCodiceEsito(), response.getErrDsc());
 		}
-		oResponse.setAction(ActionConstants.ANAGRAFICA);
+		oResponse.setAction(ActionConstants.ANAGRAFICAADD);
 		
 		return oResponse;
 	}

@@ -36,8 +36,8 @@ public class StatusService extends BaseActionService<StatusRequest, StatusRespon
 		}
 		// se utente non ha anagrafica
 		else if (!oResponse.isAnagragicaP()) {
-			response.setAction(ActionConstants.ANAGRAFICA);
-			response.getSessionData().getSession().setActionId(ActionConstants.ANAGRAFICA.getId());
+			response.setAction(ActionConstants.ANAGRAFICAADD);
+			response.getSessionData().getSession().setActionId(ActionConstants.ANAGRAFICAADD.getId());
 			return response;
 			}
 		// se utente non ha sicurezza censita
