@@ -43,13 +43,13 @@ public class ActionController {
 	}
 	
 	@RequestMapping("anagrafica")
-	public AnagraficaResponse anagrafica(@RequestBody AnagraficaRequest request, HttpHeaders httpHeaders) throws Exception{
+	public AnagraficaResponse anagrafica(@RequestBody AnagraficaRequest request) throws Exception{
 		
-		if(ObjectUtils.isEmpty(request.getUsername()) && ObjectUtils.isEmpty(httpHeaders.getFirst("USERNAME")))
+		if(ObjectUtils.isEmpty(request.getUsername()) && ObjectUtils.isEmpty(request.getAction()))
 			throw new BaseActionException(ActErrors.INVALIDREQUEST);
 		
-		if(ObjectUtils.isEmpty(request.getUsername()))
-			request.setUsername(httpHeaders.getFirst("USERNAME"));
+//		if(ObjectUtils.isEmpty(request.getUsername()))
+//			request.setUsername(httpHeaders.getFirst("USERNAME"));
 		
 		return beanFactory.getBean(AnagraficaCommand.class, request,null).doExecute();
 	}

@@ -24,7 +24,7 @@ public class AnagraficaAddService extends BaseActionService<AnagraficaRequest, A
 		
 		// controllo se action è get anagrafica
 		if(iRequest.getAction().equals(ActionConstants.ANAGRAFICAGET)) {
-			response = anagWiam.getAnagrafica(httpHeaders.getFirst("USERNAME"));
+			response = anagWiam.getAnagrafica(iRequest.getUsername());
 			
 			return response;
 		}
