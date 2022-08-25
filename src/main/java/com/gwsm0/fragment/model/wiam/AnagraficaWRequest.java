@@ -45,6 +45,11 @@ public class AnagraficaWRequest {
 	public void setNazionalità(String nazionalità) {
 		this.nazionalità = nazionalità;
 	}
+	@Override
+	public String toString() {
+		return "AnagraficaWRequest [nome=" + nome + ", cognome=" + cognome + ", codiceFiscale=" + codiceFiscale
+				+ ", dataNascita=" + dataNascita + ", comune=" + comune + ", nazionalità=" + nazionalità + "]";
+	}
 	
 	
 }

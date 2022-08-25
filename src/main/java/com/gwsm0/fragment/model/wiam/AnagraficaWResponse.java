@@ -11,6 +11,11 @@ public class AnagraficaWResponse extends BaseWiamResponse{
 
 	public void setAnagrafica(AnagraficaWRequest anagrafica) {
 		Anagrafica = anagrafica;
+	}
+
+	@Override
+	public String toString() {
+		return "AnagraficaWResponse [Anagrafica=" + Anagrafica + "]";
 	}	
 	
 	
