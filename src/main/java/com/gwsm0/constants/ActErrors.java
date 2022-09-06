@@ -27,6 +27,6 @@ public enum ActErrors {
         this.status = status;
     }
     public String getMessage() { return this.code + " [" + this.message + ']'; }
-    public String getCode() { return BaseActionException.LOGIC_PREFIX + this.code; }
+    public String getCode() { return "" + this.code; }
     public HttpStatus getStatus() { return this.status; }
 }
