@@ -1,13 +1,19 @@
 package com.gwsm0.controller;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gwsm0.constants.ActErrors;
+import com.gwsm0.constants.AppConstants;
 import com.gwsm0.error.handler.BaseActionException;
+import com.gwsm0.model.request.ContextRequest;
 import com.gwsm0.model.request.EnforcementRequest;
+import com.gwsm0.model.response.ContextResponse;
 import com.gwsm0.model.response.EnforcementResponse;
 
 
@@ -25,5 +31,19 @@ public class AppController {
 			throw new BaseActionException(ActErrors.INVALIDREQUEST);
 		
 		return null;
+	}
+	
+	@PostMapping("context/create")
+	public ResponseEntity<ContextResponse> contextCreate(@RequestBody ContextRequest request, HttpHeaders header) {
+		
+		if(ObjectUtils.isEmpty(request.getUsername()) ||  ObjectUtils.isEmpty(request.getBt()) 
+				|| ObjectUtils.isEmpty(header.getFirst(AppConstants.CustomHeader.ABI)) || ObjectUtils.isEmpty(header.getFirst(AppConstants.CustomHeader.APPNAME)) )
+			throw new BaseActionException(ActErrors.INVALIDREQUEST);
+		
+		request.setAbi(header.getFirst(AppConstants.CustomHeader.ABI));
+		request.setAppName(header.getFirst(AppConstants.CustomHeader.APPNAME));
+		
+		
+		
 	}
 }
