@@ -61,7 +61,7 @@ public class ContextService {
 			System.out.println(e.getMessage() + " , " + e.getCause());
 			throw new BaseActionException("GWSM0-APP-SESSION-ERROR", appResponse.getStatusCode());
 		}
-		// funziona
+		//funziona
 //		AppSessionResponse appResponse = new AppSessionResponse();
 //		try {
 //			appResponse = appSession.getSessionSec4(appRequest, sicSesDTO.getSessionId(), request.getAppName());
@@ -74,7 +74,10 @@ public class ContextService {
 		response.setAppSecId(appResponse.getBody().getAppSessionId());
 //		response.setAppSecId(appResponse.getAppSessionId());
 		response.setSecSessId(sicSesDTO.getSessionId());
-		response.setCreated(true);
+		if(!Boolean.TRUE.equals(appResponse.getBody().getAlreadyActive()))
+			response.setCreated(true);
+		else 
+			response.setAlreadyActive(true);
 		//TODO worka, finire di implementare logica e chiamata ad appsession , ora ce solo controllo su securety session
 		return new ResponseEntity<>(response,HttpStatus.OK);
 		

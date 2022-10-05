@@ -5,6 +5,7 @@ public class ContextResponse {
 	private String secSessId;
 	private String appSecId;
 	private Boolean created;
+	private Boolean alreadyActive;
 	
 	public String getSecSessId() {
 		return secSessId;
@@ -23,6 +24,12 @@ public class ContextResponse {
 	}
 	public void setCreated(Boolean created) {
 		this.created = created;
+	}
+	public Boolean getAlreadyActive() {
+		return alreadyActive;
+	}
+	public void setAlreadyActive(Boolean alreadyActive) {
+		this.alreadyActive = alreadyActive;
 	}
 	
 	
