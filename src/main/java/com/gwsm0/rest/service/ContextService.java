@@ -55,7 +55,7 @@ public class ContextService {
 		
 		ResponseEntity<AppSessionResponse> appResponse = new ResponseEntity<AppSessionResponse>(new AppSessionResponse() ,HttpStatus.OK);
 		try {
-			appResponse = appSession.getSessionSec3(appRequest, sicSesDTO.getSessionId(), request.getAppName());
+			appResponse = appSession.getSessionApp(appRequest, sicSesDTO.getSessionId(), request.getAppName());
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage() + " , " + e.getCause());
