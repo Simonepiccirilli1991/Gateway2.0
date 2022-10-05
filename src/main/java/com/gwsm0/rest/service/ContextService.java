@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.gwsm0.error.handler.BaseActionException;
+import com.gwsm0.fragment.model.session.AppSessionRequest;
+import com.gwsm0.fragment.model.session.AppSessionResponse;
 import com.gwsm0.fragment.model.session.SessionSecRequest;
 import com.gwsm0.fragment.model.session.SessionSecResponse;
 import com.gwsm0.model.request.ContextRequest;
 import com.gwsm0.model.response.ContextResponse;
+import com.gwsm0.rest.fragment.session.AppSessionFrag;
 import com.gwsm0.rest.fragment.session.SecuretySessionFrag;
 
 @Service
@@ -18,6 +21,8 @@ public class ContextService {
 
 	@Autowired
 	SecuretySessionFrag secSession;
+	@Autowired
+	AppSessionFrag appSession;
 	
 	public ResponseEntity<ContextResponse> contextCreate(ContextRequest request) {
 		
@@ -41,6 +46,33 @@ public class ContextService {
 		if(ObjectUtils.isEmpty(sicSesDTO.getScope()) || !sicSesDTO.getScope().equals("L2")) {
 			throw new BaseActionException("GWSM0-SESSION-ERROR", HttpStatus.FORBIDDEN);
 		}
+		
+		// se sessione e in l2 continuo e setto request per creazione applicativa
+		AppSessionRequest appRequest = new AppSessionRequest();
+		appRequest.setBt(bt);
+		appRequest.setVerificato(true);
+		// chiamata a fragment per creazione sessione app
+		
+		ResponseEntity<AppSessionResponse> appResponse = new ResponseEntity<AppSessionResponse>(new AppSessionResponse() ,HttpStatus.OK);
+		try {
+			appResponse = appSession.getSessionSec3(appRequest, sicSesDTO.getSessionId(), request.getAppName());
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage() + " , " + e.getCause());
+			throw new BaseActionException("GWSM0-APP-SESSION-ERROR", appResponse.getStatusCode());
+		}
+		// funziona
+//		AppSessionResponse appResponse = new AppSessionResponse();
+//		try {
+//			appResponse = appSession.getSessionSec4(appRequest, sicSesDTO.getSessionId(), request.getAppName());
+//		}
+//		catch(Exception e) {
+//			System.out.println(e.getMessage() + " , " + e.getCause());
+//			throw new BaseActionException("GWSM0-APP-SESSION-ERROR", HttpStatus.DESTINATION_LOCKED);
+//		}
+		
+		response.setAppSecId(appResponse.getBody().getAppSessionId());
+//		response.setAppSecId(appResponse.getAppSessionId());
 		response.setSecSessId(sicSesDTO.getSessionId());
 		response.setCreated(true);
 		//TODO worka, finire di implementare logica e chiamata ad appsession , ora ce solo controllo su securety session
