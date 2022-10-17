@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import com.gwsm0.error.handler.BaseErrorException;
 import com.gwsm0.fragment.model.session.AppSessionRequest;
 import com.gwsm0.fragment.model.session.AppSessionResponse;
 import com.gwsm0.rest.error.BaseActionException;
@@ -47,7 +48,7 @@ public class AppSessionFrag {
 
 	}
 	
-	// workama fa piu chiamate , non capisco perchè
+	// workama al top 
 	public ResponseEntity<AppSessionResponse> getSessionApp(AppSessionRequest request,String secSessionId, String appName) {
 
 		Mono<ResponseEntity<AppSessionResponse>> sessionDTO = webClient.post()
@@ -57,7 +58,18 @@ public class AppSessionFrag {
 				.header("SEC_SESSION", secSessionId)
 				.header("APP_NAME", appName)
 				.body(Mono.justOrEmpty(request), AppSessionRequest.class)
-				.retrieve().toEntity(AppSessionResponse.class);
+				.retrieve()
+				// gestione generica per tutti i 400
+				.onStatus(HttpStatus:: is4xxClientError, response -> {
+					//TODO capire come prendere sta minchia di parametro dalla response anche s ein errore
+					throw new BaseErrorException(response.statusCode(), "blabla");
+					//return Mono.error(new BaseErrorException(HttpStatus.CONFLICT, "prova90"));
+				})
+				.onStatus(HttpStatus::is5xxServerError, response ->{
+					throw new BaseErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "GENERIC-ERORR-GWSM0");
+				})
+				.toEntity(AppSessionResponse.class);
+		
 		ResponseEntity<AppSessionResponse> response = sessionDTO.block();
 		//NOTA BENE OGNI VOLTA CHE USI BLOCK FA SUBSCRIPTION QUINDI CHIUDE CHIAMATA,
 		// VA PASSATO SU DTO SE NO FA PIU CHIAMATE A L?API TANTI QUANTI SONO i BLOCK()
@@ -69,38 +81,40 @@ public class AppSessionFrag {
 
 	}
 	
-	// testare questa
-//	public ResponseEntity<AppSessionResponse> getSessionSec3(AppSessionRequest request,String secSessionId, String appName) {
-//
-//		
-//		Mono<Object> sessionDTO = webClient.post()
-//				.uri("/app/create")
-//				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//				// setto header da passare al momento
-//				.header("SEC_SESSION", secSessionId)
-//				.header("APP_NAME", appName)
-//				.body(Mono.just(request), AppSessionRequest.class)
-//				.retrieve()
-//				.onStatus(HttpStatus:: is4xxClientError, response -> Mono.error( new com.gwsm0.error.handler.BaseActionException("GWSM0-APP-SESSION-ERROR", response.statusCode())))
-//				
-//							
-//				.toEntityFlux(AppSessionResponse.class)
-//				.flatMap(entity -> ServerResponse
-//						.status(entity.getStatusCode())
-//						.body(entity.getBody(),AppSessionResponse.class ));
-//		
-////		HttpHeaders header = sessionDTO.block().getHeaders();
-////		HttpStatus status = sessionDTO.block().getStatusCode();
-////		System.out.println(header);
-////		System.out.println(status);
-//		System.out.println("qui ci siamo");
-//		//System.out.println(sessionDTO.block().getBody().getCodServizio());
-//		// messo qua per debug
-////		Mono<AppSessionResponse> response = sessionDTO.flatMap(resp -> ((ClientResponse) resp).bodyToMono(AppSessionResponse.class));
-//		System.out.println(sessionDTO.share().block());
-////		return sessionDTO.block();		
-//		return session;
-//				
-//	}
+	// workama al top , non gestisce errori al momento
+		public ResponseEntity<AppSessionResponse> getSessionAppAdnError(AppSessionRequest request,String secSessionId, String appName) {
+
+			Mono<ResponseEntity<AppSessionResponse>> sessionDTO = webClient.post()
+					.uri("/app/create")
+					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+					// setto header da passare al momento
+					.header("SEC_SESSION", secSessionId)
+					.header("APP_NAME", appName)
+					.body(Mono.justOrEmpty(request), AppSessionRequest.class)
+					.retrieve()
+					// gestione generica per tutti i 400
+					.onStatus(HttpStatus:: is4xxClientError, response -> {
+						response.bodyToMono(AppSessionResponse.class)
+						.handle((error,sink) ->
+						
+						sink.error(new BaseErrorException(response.statusCode(),error.getCodServizio())));
+						throw new BaseErrorException(response.statusCode(), "prova");
+					
+					})
+					.onStatus(HttpStatus::is5xxServerError, response ->{
+						throw new BaseErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "GENERIC-ERORR-GWSM0");
+					})
+					.toEntity(AppSessionResponse.class);
+
+			ResponseEntity<AppSessionResponse> response = sessionDTO.block();
+			//NOTA BENE OGNI VOLTA CHE USI BLOCK FA SUBSCRIPTION QUINDI CHIUDE CHIAMATA,
+			// VA PASSATO SU DTO SE NO FA PIU CHIAMATE A L?API TANTI QUANTI SONO i BLOCK()
+			System.out.println(response.getHeaders());
+			System.out.println(response.getStatusCode());
+
+
+			return new ResponseEntity<>(response.getBody(),response.getHeaders(),response.getStatusCode());
+
+		}
 	
 }

@@ -11,7 +11,15 @@ public class BaseActionException extends RuntimeException {
 	private static final String GENERIC = "gwsm0.generic";
 	private static final long serialVersionUID = 1L;
 	private String errId;
+	private HttpStatus status;
 	
+	
+	public HttpStatus getStatus() {
+		return status;
+	}
+	public void setStatus(HttpStatus status) {
+		this.status = status;
+	}
 	public String getErrId() { return errId; }
 	public void setErrId(String errId) { this.errId = errId; }
 	

@@ -54,13 +54,13 @@ public class ContextService {
 		// chiamata a fragment per creazione sessione app
 		
 		ResponseEntity<AppSessionResponse> appResponse = new ResponseEntity<AppSessionResponse>(new AppSessionResponse() ,HttpStatus.OK);
-		try {
-			appResponse = appSession.getSessionApp(appRequest, sicSesDTO.getSessionId(), request.getAppName());
-		}
-		catch(Exception e) {
-			System.out.println(e.getMessage() + " , " + e.getCause());
-			throw new BaseActionException("GWSM0-APP-SESSION-ERROR", appResponse.getStatusCode());
-		}
+//		try {
+			appResponse = appSession.getSessionAppAdnError(appRequest, sicSesDTO.getSessionId(), request.getAppName());
+//		}
+//		catch(Exception e) {
+//			System.out.println(e.getMessage() + " , " + e.getCause());
+//			throw new BaseActionException("GWSM0-APP-SESSION-ERROR", appResponse.getStatusCode());
+//		}
 		//funziona
 //		AppSessionResponse appResponse = new AppSessionResponse();
 //		try {
