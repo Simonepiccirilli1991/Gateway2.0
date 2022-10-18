@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gwsm0.constants.ActErrors;
 import com.gwsm0.constants.AppConstants;
 import com.gwsm0.error.handler.BaseActionException;
+import com.gwsm0.error.handler.BaseErrorException;
 import com.gwsm0.model.request.ContextRequest;
 import com.gwsm0.model.request.EnforcementRequest;
+import com.gwsm0.model.request.LogoutRequest;
 import com.gwsm0.model.response.ContextResponse;
 import com.gwsm0.model.response.EnforcementResponse;
+import com.gwsm0.model.response.LogoutResponse;
 import com.gwsm0.rest.service.ContextService;
+import com.gwsm0.rest.service.LogoutService;
 
 
 
@@ -28,6 +32,7 @@ public class AppController {
 
 	@Autowired
 	private ContextService contextService;
+	@Autowired LogoutService logoutService;
 	// setto sicurezza, mappatura 1 a 1
 	@RequestMapping("scr/enforcement")
 	public EnforcementResponse enforcement(@RequestBody EnforcementRequest request) {
@@ -54,6 +59,25 @@ public class AppController {
 		
 		
 	}
+	
+	@PostMapping("context/logout")
+	public ResponseEntity<LogoutResponse> logout(@RequestBody LogoutRequest request,
+			@RequestHeader HttpHeaders header){
+		
+		request.setAppSecId(header.getFirst("X-APP-TOKEN"));
+		request.setSecSessId(header.getFirst("X-SEC-TOKEN"));
+		
+		// controllo qui al volo poi inserisco meglio
+		if(ObjectUtils.isEmpty(request.getAppSecId()) || ObjectUtils.isEmpty(request.getSecSessId())
+				|| ObjectUtils.isEmpty(request.getBt())) {
+			throw new BaseErrorException(HttpStatus.BAD_REQUEST, "INVALID_REQUEST");
+			
+		}
+		
+		return logoutService.logout(request);
+		
+	}
+	
 	
 	@RequestMapping("errori")
 	public void prova(@RequestBody ContextService request) {

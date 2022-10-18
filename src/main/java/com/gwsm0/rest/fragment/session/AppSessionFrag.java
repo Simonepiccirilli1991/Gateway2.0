@@ -13,6 +13,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.gwsm0.error.handler.BaseErrorException;
 import com.gwsm0.fragment.model.session.AppSessionRequest;
 import com.gwsm0.fragment.model.session.AppSessionResponse;
+import com.gwsm0.model.request.LogoutRequest;
+import com.gwsm0.model.response.LogoutResponse;
 import com.gwsm0.rest.error.BaseActionException;
 
 import reactor.core.publisher.Mono;
@@ -98,7 +100,7 @@ public class AppSessionFrag {
 						.handle((error,sink) ->
 						
 						sink.error(new BaseErrorException(response.statusCode(),error.getCodServizio())));
-						throw new BaseErrorException(response.statusCode(), "prova");
+						throw new BaseErrorException(response.statusCode(), "da rimpeire poi");
 					
 					})
 					.onStatus(HttpStatus::is5xxServerError, response ->{
@@ -115,6 +117,44 @@ public class AppSessionFrag {
 
 			return new ResponseEntity<>(response.getBody(),response.getHeaders(),response.getStatusCode());
 
+		}
+		
+		
+		//logout 
+		public ResponseEntity<LogoutResponse> logout(String bt, String username, String appSession,String secSession){
+
+			// monto request qui per in vista di futuri arricchimenti
+			LogoutRequest request = new LogoutRequest();
+			request.setBt(bt);
+			request.setAppSecId(appSession);
+
+			// chiamata a service
+			Mono<ResponseEntity<LogoutResponse>> logoutDTO = webClient.post()
+					.uri("/app/logout")
+					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+					// setto header da passare al momento
+					.header("SEC_SESSION", secSession)
+					.header("APP_NAME", "mocked")
+					.body(Mono.justOrEmpty(request), LogoutRequest.class)
+					.retrieve()
+					// gestione generica per tutti i 400
+					.onStatus(HttpStatus:: is4xxClientError, response -> {
+						//TODO capire come prendere sta minchia di parametro dalla response anche s ein errore
+						throw new BaseErrorException(response.statusCode(), "blabla");
+						//return Mono.error(new BaseErrorException(HttpStatus.CONFLICT, "prova90"));
+					})
+					.onStatus(HttpStatus::is5xxServerError, response ->{
+						throw new BaseErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "GENERIC-ERORR-GWSM0");
+					})
+					.toEntity(LogoutResponse.class);
+
+			ResponseEntity<LogoutResponse> response = logoutDTO.block();
+
+			System.out.println(response.getHeaders());
+			System.out.println(response.getStatusCode());
+
+
+			return new ResponseEntity<>(response.getBody(),response.getHeaders(),response.getStatusCode());
 		}
 	
 }

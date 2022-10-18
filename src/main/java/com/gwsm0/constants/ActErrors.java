@@ -7,26 +7,24 @@ import com.gwsm0.rest.error.BaseActionException;
 public enum ActErrors {
 
 	
-	INVALIDACTION ("Action not validated",                                "invalidaction",    HttpStatus.UNAUTHORIZED),
+	INVALIDACTION ("Action not validated",    HttpStatus.UNAUTHORIZED),
 	DEFAULTACTION ("" , "Error . da definire"),
-	INVALIDREQUEST ("Parameters missing",                                  "invalidrequest",   HttpStatus.BAD_REQUEST);
+	INVALIDREQUEST ("Parameters missing",    HttpStatus.BAD_REQUEST);
 	
 	
 	private final String message;
-    private final String code;
     private final HttpStatus status;
     
 	ActErrors(String message, String code) {
         this.message = message;
-        this.code = code;
         this.status = HttpStatus.FORBIDDEN; // Default value
     }
-    ActErrors(String message, String code, HttpStatus status) {
+    ActErrors(String message, HttpStatus status) {
         this.message = message;
-        this.code = code;
+		
         this.status = status;
     }
-    public String getMessage() { return this.code + " [" + this.message + ']'; }
-    public String getCode() { return "" + this.code; }
+    public String getMessage() { return  " [" + this.message + ']'; }
+    public String getCode() { return "" ; }
     public HttpStatus getStatus() { return this.status; }
 }
