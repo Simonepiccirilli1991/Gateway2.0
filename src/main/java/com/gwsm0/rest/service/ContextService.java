@@ -78,7 +78,7 @@ public class ContextService {
 			response.setCreated(true);
 		else 
 			response.setAlreadyActive(true);
-		//TODO worka, finire di implementare logica e chiamata ad appsession , ora ce solo controllo su securety session
+		
 		return new ResponseEntity<>(response,appResponse.getHeaders(),HttpStatus.OK);
 		
 		
