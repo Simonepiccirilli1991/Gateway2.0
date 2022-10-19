@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
@@ -50,7 +51,7 @@ public class ActionControllerTest {
 	EnforcementWiam enforcement;
 	@InjectMocks 
 	EnforcementService enforcementSer;
-	@Mock
+	@MockBean
 	AnagraficaWiam anagWiam;
 	@Autowired
 	ObjectMapper objectMapper;
@@ -120,18 +121,24 @@ public class ActionControllerTest {
 		
 		// setto response
 		AnagraficaResponse response = new AnagraficaResponse();
-		response.setAnagrafica(anagrafica);
+		response.setAnagrafica(new AnagraficaWRequest());
+		response.getAnagrafica().setCodiceFiscale("PCCRV");
+		response.getAnagrafica().setCognome("Cognome");
+		response.getAnagrafica().setComune("Comune");
+		response.getAnagrafica().setDataNascita("DATA/nascita");
+		response.getAnagrafica().setNazionalità("Nazionalità");
+		response.getAnagrafica().setNome("nome");
 		
 		Mockito.when(anagWiam.getAnagrafica(anyString())).thenReturn(response);
 		
 		request.setAnagrafica(anagrafica);
-		AnagraficaResponse oResponse =  
-				(AnagraficaResponse) mvc.perform(post("/action/anagrafica")
+		String mock =  mvc.perform(post("/action/anagrafica")
 						.contentType("application/json")
 						.content(objectMapper.writeValueAsString(request)))
-				.andExpect(status().isOk());
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
 		
-		assertThat(oResponse.getAnagrafica().getCodiceFiscale()).isSameAs("PCCRV");
+		System.out.println(mock);
 	}
 	
 	//@Test
