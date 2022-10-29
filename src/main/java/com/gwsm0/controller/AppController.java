@@ -1,5 +1,7 @@
 package com.gwsm0.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,15 @@ import com.gwsm0.constants.AppConstants;
 import com.gwsm0.error.handler.BaseActionException;
 import com.gwsm0.error.handler.BaseErrorException;
 import com.gwsm0.model.request.ContextRequest;
+import com.gwsm0.model.request.DocumentRequest;
 import com.gwsm0.model.request.EnforcementRequest;
 import com.gwsm0.model.request.LogoutRequest;
 import com.gwsm0.model.response.ContextResponse;
+import com.gwsm0.model.response.DocumentResponse;
 import com.gwsm0.model.response.EnforcementResponse;
 import com.gwsm0.model.response.LogoutResponse;
 import com.gwsm0.rest.service.ContextService;
+import com.gwsm0.rest.service.DocumentiService;
 import com.gwsm0.rest.service.LogoutService;
 
 
@@ -33,6 +38,9 @@ public class AppController {
 	@Autowired
 	private ContextService contextService;
 	@Autowired LogoutService logoutService;
+	@Autowired
+	DocumentiService docServ;
+	
 	// setto sicurezza, mappatura 1 a 1
 	@RequestMapping("scr/enforcement")
 	public EnforcementResponse enforcement(@RequestBody EnforcementRequest request) {
@@ -79,9 +87,10 @@ public class AppController {
 	}
 	
 	
-	@RequestMapping("errori")
-	public void prova(@RequestBody ContextService request) {
+	@PostMapping("document")
+	public ResponseEntity<List<DocumentResponse>> document(@RequestBody DocumentRequest request) throws Exception{
 		
-		throw new BaseActionException("prova action exception", HttpStatus.CONFLICT);
+		ResponseEntity<List<DocumentResponse>> response = new ResponseEntity<>(docServ.controllaFirme(request),HttpStatus.OK);
+		return response;
 	}
 }
