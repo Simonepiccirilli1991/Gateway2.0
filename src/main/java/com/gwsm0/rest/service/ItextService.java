@@ -37,6 +37,7 @@ public class ItextService {
 	    return infoFirme(reader);
 	}
 	
+	// worka al top bum
 	private List<DocumentResponse> infoFirme(PdfReader pdf){
 		
 		
@@ -49,12 +50,16 @@ public class ItextService {
         System.out.println(names);
         for (String name : names) {
             System.out.println("===== " + name + " =====");
-            PdfPKCS7 pkcs7 = signUtil.readSignatureData(name);
-            X509Certificate cert = (X509Certificate) pkcs7.getSigningCertificate();
-            System.out.println("Name of the signer: " + CertificateInfo.getSubjectFields(cert).getField("CN"));
-            if (pkcs7.getSignName() != null) {
-                System.out.println("Alternative name of the signer: " + pkcs7.getSignName());
-            }
+            System.out.println(signUtil.getSignature(name).getName());
+            
+            
+            
+//            PdfPKCS7 pkcs7 = signUtil.readSignatureData(name);
+//            X509Certificate cert = (X509Certificate) pkcs7.getSigningCertificate();
+//            System.out.println("Name of the signer: " + CertificateInfo.getSubjectFields(cert).getField("CN"));
+//            if (pkcs7.getSignName() != null) {
+//                System.out.println("Alternative name of the signer: " + pkcs7.getSignName());
+//            }
         
         }
 		
