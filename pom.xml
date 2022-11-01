@@ -15,6 +15,7 @@
 	<description>seor GWSM0</description>
 	<properties>
 		<java.version>11</java.version>
+		<itext.version>7.2.4</itext.version>
 	</properties>
 	<dependencies>
 	
@@ -65,6 +66,13 @@
             <scope>compile</scope>
         </dependency>
 		
+	<dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itext7-core</artifactId>
+        <version>${itext.version}</version>
+        <type>pom</type>
+    </dependency>
+
 	</dependencies>
 
 	<build>

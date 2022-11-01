@@ -27,6 +27,7 @@ import com.gwsm0.model.response.EnforcementResponse;
 import com.gwsm0.model.response.LogoutResponse;
 import com.gwsm0.rest.service.ContextService;
 import com.gwsm0.rest.service.DocumentiService;
+import com.gwsm0.rest.service.ItextService;
 import com.gwsm0.rest.service.LogoutService;
 
 
@@ -40,6 +41,8 @@ public class AppController {
 	@Autowired LogoutService logoutService;
 	@Autowired
 	DocumentiService docServ;
+	@Autowired
+	ItextService itextService;
 	
 	// setto sicurezza, mappatura 1 a 1
 	@RequestMapping("scr/enforcement")
@@ -90,7 +93,15 @@ public class AppController {
 	@PostMapping("document")
 	public ResponseEntity<List<DocumentResponse>> document(@RequestBody DocumentRequest request) throws Exception{
 		
-		ResponseEntity<List<DocumentResponse>> response = new ResponseEntity<>(docServ.controllaFirme(request),HttpStatus.OK);
+		ResponseEntity<List<DocumentResponse>> response = new ResponseEntity<>(docServ.controllaFirmeNew(request),HttpStatus.OK);
+		return response;
+	}
+	
+	
+	@PostMapping("documenti")
+	public ResponseEntity<List<DocumentResponse>> documenti(@RequestBody DocumentRequest request) throws Exception{
+		
+		ResponseEntity<List<DocumentResponse>> response = new ResponseEntity<>(itextService.controllaFirme(request),HttpStatus.OK);
 		return response;
 	}
 }
