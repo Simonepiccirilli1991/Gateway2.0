@@ -39,8 +39,6 @@ public class DocumentiService {
 	// salva documento e torna stringa
 	public String getDocument() throws Exception {
 
-		// chiamo la getdOCUMENT AL MOMENTO torna solo pdf classico
-		// voglio salvarlo qui e tornare stringa il contenuto.
 		String resp = docFrag.docToString();
 
 		return resp;
@@ -69,7 +67,7 @@ public class DocumentiService {
 		return controlloFirmeVuote(reader);
 	}
 
-	// metodo nuovo 
+	// metodo da rivedere forse
 	public List<DocumentResponse> controllaFirme1(DocumentRequest request) throws IOException{
 
 		byte[] byteResp = docFrag.getPdfByte(request.getDocumentName());
@@ -89,7 +87,7 @@ public class DocumentiService {
 		return controllaFirmaNew(byteResp);
 	}
 
-	// al momento worka da paura
+	// al momento worka da paura usare questo sempre per firme
 	private List<DocumentResponse> controlloFirme(PdfReader pdf){
 
 		AcroFields fields = pdf.getAcroFields();
