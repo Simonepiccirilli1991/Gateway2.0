@@ -93,10 +93,16 @@ public class AppController {
 	@PostMapping("document")
 	public ResponseEntity<List<DocumentResponse>> document(@RequestBody DocumentRequest request) throws Exception{
 		
-		ResponseEntity<List<DocumentResponse>> response = new ResponseEntity<>(docServ.controllaFirmeNew(request),HttpStatus.OK);
+		ResponseEntity<List<DocumentResponse>> response = new ResponseEntity<>(docServ.controllaFirme(request),HttpStatus.OK);
 		return response;
 	}
 	
+	@PostMapping("document/blank")
+	public ResponseEntity<List<DocumentResponse>> documentBlank(@RequestBody DocumentRequest request) throws Exception{
+		
+		ResponseEntity<List<DocumentResponse>> response = new ResponseEntity<>(docServ.controllaFirmeVuote(request),HttpStatus.OK);
+		return response;
+	}
 	
 	@PostMapping("documenti")
 	public ResponseEntity<List<DocumentResponse>> documenti(@RequestBody DocumentRequest request) throws Exception{

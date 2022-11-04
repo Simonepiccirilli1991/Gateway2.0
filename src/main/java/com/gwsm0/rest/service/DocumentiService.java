@@ -45,8 +45,7 @@ public class DocumentiService {
 
 		return resp;
 	}
-	// getPdf, prendo pdf come byte array e me lo ricostruisco qui
-	// per controllo acrofiled
+	// best metod , usare questo
 	public List<DocumentResponse> controllaFirme(DocumentRequest request) throws IOException{
 
 		byte[] byteResp = docFrag.getPdfByte(request.getDocumentName());
@@ -57,7 +56,18 @@ public class DocumentiService {
 
 		return controlloFirme(reader);
 	}
+	
+	// controlla solo acrofield non firmati
+	public List<DocumentResponse> controllaFirmeVuote(DocumentRequest request) throws IOException{
 
+		byte[] byteResp = docFrag.getPdfByte(request.getDocumentName());
+
+		// ricreo pdf e poi dedico cosa farne
+		ByteArrayInputStream inStream = new ByteArrayInputStream(byteResp);
+		PdfReader reader = new PdfReader(inStream);
+
+		return controlloFirmeVuote(reader);
+	}
 
 	// metodo nuovo 
 	public List<DocumentResponse> controllaFirme1(DocumentRequest request) throws IOException{
@@ -117,7 +127,25 @@ public class DocumentiService {
 
 		return response;
 	}
+	
+	private List<DocumentResponse> controlloFirmeVuote(PdfReader pdf){
 
+		AcroFields fields = pdf.getAcroFields();
+		List<DocumentResponse> response = new ArrayList<>();
+		List<String> listaFirme = fields.getFieldNamesWithBlankSignatures();
+		System.out.println(listaFirme);
+		for(String listaFirmes : listaFirme) {
+
+			DocumentResponse docDto = new DocumentResponse();
+
+			docDto.setDocumentId(listaFirmes.substring(listaFirmes.lastIndexOf("-") + 1));
+
+			response.add(docDto);
+		}
+		return response;
+	}
+	
+	
 	private List<DocumentResponse> controlloFirmeOld(PdfReader pdf){
 
 		AcroFields fields = pdf.getAcroFields();
