@@ -1,4 +1,4 @@
-package com.gwsm0.model.request;
+package com.gwsm0.model.response;
 
 import com.gwsm0.model.base.BaseActionResponse;
 

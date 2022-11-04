@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 public class RestProxyhelper {
 
 	// todo settare porta proxy
-    private String proxyServerHost;
+    private String proxyServerHost = "localhost:";
     /** @Value("${INET_PROXY_SERVER_PORT:none}")
      private String proxyServerPort; */
 
