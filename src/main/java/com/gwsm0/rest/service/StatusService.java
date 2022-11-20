@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.gwsm0.constants.ActionConstants;
 import com.gwsm0.fragment.model.wiam.StatusWResponse;
 import com.gwsm0.model.base.BaseActionService;
+import com.gwsm0.model.base.Session;
+import com.gwsm0.model.base.SessionData;
 import com.gwsm0.model.request.StatusRequest;
 import com.gwsm0.model.response.StatusResponse;
 import com.gwsm0.rest.fragment.wiam.StatusWiam;
@@ -22,7 +24,8 @@ public class StatusService extends BaseActionService<StatusRequest, StatusRespon
 		
 		// chiamata a status wiam
 		StatusResponse response = new StatusResponse();
-		
+		response.setSessionData(new SessionData());
+		response.getSessionData().setSession(new Session());
 		StatusWResponse oResponse = new StatusWResponse();
 		
 		oResponse = statusW.checkStatus(iRequest);

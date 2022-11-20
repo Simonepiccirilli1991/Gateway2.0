@@ -3,6 +3,7 @@ package com.gwsm0.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gwsm0.constants.ActionConstants;
 import com.gwsm0.fragment.model.wiam.AnagraficaWRequest;
@@ -43,10 +45,10 @@ import com.gwsm0.rest.service.StatusService;
 @AutoConfigureMockMvc
 public class ActionControllerTest {
 	
-	@Mock StatusWiam statusWiam;
-	@Autowired protected MockMvc mvc;
-	@InjectMocks StatusService statusService;
-	@Mock RestTemplate rt;
+	@MockBean 
+	StatusWiam statusWiam;
+	@Autowired 
+	protected MockMvc mvc;
 	@Mock
 	EnforcementWiam enforcement;
 	@InjectMocks 
@@ -55,30 +57,58 @@ public class ActionControllerTest {
 	AnagraficaWiam anagWiam;
 	@Autowired
 	ObjectMapper objectMapper;
-	@InjectMocks AnagraficaAddService anagAdd;
+	@InjectMocks 
+	AnagraficaAddService anagAdd;
+	@Autowired
+	StatusService statusService;
+	
+	ObjectMapper mapper = new ObjectMapper();
 	
 	
 	
 	
-	//@Test
+	@Test
 	public void statusOK() throws Exception {
 		
 		StatusWResponse r = new StatusWResponse();
 		r.setUtenteRegistrato(true);
-		r.setAnagragicaP(true);
+		r.setAnagragicaP(false);
 		
 		StatusResponse response = new StatusResponse();
 		response.setUtenteRegistrato(true);
 		StatusRequest request = new StatusRequest();
-		// Mocko status principale per vedere se gira
-		//when(statusService.call_(ArgumentMatchers.any(StatusRequest.class), any(HttpHeaders.class))).thenReturn(response);
+		request.setSessionData(new SessionData());
 		
-		Mockito.when(rt.postForObject(Mockito.eq("http://localhost:8083/wiam/status"), any(Object.class),Mockito.eq(StatusWResponse.class))).thenReturn(r);
-//		Mockito.when(statusWiam.statusW(any(StatusRequest.class))).thenReturn(response);
-		//TODO capire per quale cazzo di motivo ogni volta che chiamo il servici nn torna oggetto dovuto
+		when(statusWiam.checkStatus(any(StatusRequest.class))).thenReturn(r);
 		response = statusService.call_(request, null);
 		
-		assertThat(response.getAction()).isSameAs("ANAGRAFICA");
+		assertThat(response.getAction()).isSameAs(ActionConstants.ANAGRAFICAADD);
+
+		// prova a cascata
+		
+		r.setAnagragicaP(true);
+		r.setSicuriro(false);
+		when(statusWiam.checkStatus(any(StatusRequest.class))).thenReturn(r);
+		response = statusService.call_(request, null);
+		
+		assertThat(response.getAction()).isSameAs(ActionConstants.SICUREZZA);
+		
+		// enforce
+		r.setSicuriro(true);
+		r.setEnforced(false);
+		when(statusWiam.checkStatus(any(StatusRequest.class))).thenReturn(r);
+		response = statusService.call_(request, null);
+		
+		assertThat(response.getAction()).isSameAs(ActionConstants.ENFORCEMENT);
+		
+		// consent
+		// enforce
+		r.setSicuriro(true);
+		r.setEnforced(true);
+		when(statusWiam.checkStatus(any(StatusRequest.class))).thenReturn(r);
+		response = statusService.call_(request, null);
+
+		assertThat(response.getAction()).isSameAs(ActionConstants.CONSENT);
 	}
 	
 	@Test
@@ -138,10 +168,13 @@ public class ActionControllerTest {
 				.andExpect(status().isOk()).andReturn().getResponse()
 				.getContentAsString();
 		
-		System.out.println(mock);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		AnagraficaResponse fResp = mapper.readValue(mock, AnagraficaResponse.class);
+		System.out.println(fResp);
 	}
 	
-	//@Test
+	@Test
 	public void anagraficaAddOK() throws JsonProcessingException, Exception {
 		// setto request
 		AnagraficaRequest request = new AnagraficaRequest();
@@ -168,12 +201,15 @@ public class ActionControllerTest {
 		
 		request.setAnagrafica(anagrafica);
 //		
-		mvc.perform(post("/action/anagrafica")
+		String oResp = mvc.perform(post("/action/anagrafica")
 				.contentType("application/json")
 				.content(objectMapper.writeValueAsString(request)))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 		
-		//assertThat(oResponse.getAnagrafica().getCodiceFiscale()).isSameAs("PCCRV");
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		AnagraficaResponse fResp = mapper.readValue(oResp, AnagraficaResponse.class);
+		System.out.println(fResp);
 	}
 	
 	@Test

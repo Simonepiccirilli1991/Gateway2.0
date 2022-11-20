@@ -66,7 +66,7 @@ public class TestWebServer {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 	
-	@Test
+	//@Test
 	public void firstTest() throws JsonProcessingException, Exception {
 		
 		SessionSecResponse response1 = new SessionSecResponse();

@@ -93,13 +93,12 @@ public class DocumentiService {
 		AcroFields fields = pdf.getAcroFields();
 		List<DocumentResponse> response = new ArrayList<>();
 		List<String> listaFirme = fields.getSignedFieldNames();
-		System.out.println(listaFirme);
+
 		for(String listaFirmes : listaFirme) {
 
 			DocumentResponse docDto = new DocumentResponse();
 			String firmante = "";
 
-			int revision = pdf.getAcroFields().getRevision(listaFirmes);
 
 			AcroFields.Item item = fields.getFieldItem(listaFirmes);
 			PdfDictionary d = item.getMerged(0);
@@ -107,7 +106,6 @@ public class DocumentiService {
 
 			if (v != null) {
 				PdfString name = v.getAsString(PdfName.NAME);
-				//System.out.println("Rev."+revision+": Signed by "+ name.toString());
 				if(!ObjectUtils.isEmpty(name))
 					firmante = name.toString();
 			}
@@ -119,7 +117,6 @@ public class DocumentiService {
 				docDto.setSignature(firmante);
 				response.add(docDto);
 			}
-			System.out.println(firmante);
 		}
 
 

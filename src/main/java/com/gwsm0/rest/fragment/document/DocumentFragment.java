@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +24,8 @@ import com.lowagie.text.pdf.PdfReader;
 public class DocumentFragment {
 
 	
+	@Value("${configuration.docv0.get-pdf}")
+	private String getPdfUrl;
 	
 	RestTemplate restTemplate = new RestTemplate();
 	
@@ -48,14 +50,16 @@ public class DocumentFragment {
 		return response;
 
 	}
+	// passare nome pdf come header nella get
 	// getPdf
 	public byte[] getPdfByte(String nomePdf) {
 		HttpHeaders headers = new HttpHeaders();
+		headers.add("pdfWork", nomePdf);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_PDF, MediaType.APPLICATION_OCTET_STREAM));
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
 		ResponseEntity<byte[]> result =
-				restTemplate.exchange("http://localhost:8080/docv0/getPdf", HttpMethod.GET, entity, byte[].class);
+				restTemplate.exchange(getPdfUrl, HttpMethod.GET, entity, byte[].class);
 
 
 		byte[] content = result.getBody();
