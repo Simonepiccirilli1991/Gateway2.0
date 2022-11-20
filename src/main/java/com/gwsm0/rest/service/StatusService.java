@@ -34,7 +34,7 @@ public class StatusService extends BaseActionService<StatusRequest, StatusRespon
 		// se utente non registarto action registrati
 		if(!oResponse.isUtenteRegistrato()) {
 			response.setAction(ActionConstants.REGISTRATI);
-			//response.getSessionData().getSession().setActionId(ActionConstants.REGISTRATI.getId());
+			response.getSessionData().getSession().setActionId(ActionConstants.REGISTRATI.getId());
 			return response;
 		}
 		// se utente non ha anagrafica

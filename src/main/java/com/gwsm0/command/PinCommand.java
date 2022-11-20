@@ -3,7 +3,10 @@ package com.gwsm0.command;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
+import com.gwsm0.constants.ActErrors;
+import com.gwsm0.error.handler.BaseActionException;
 import com.gwsm0.model.request.PinRequest;
 import com.gwsm0.model.response.PinResponse;
 import com.gwsm0.rest.service.CheckPinService;
@@ -21,14 +24,14 @@ public class PinCommand extends BaseActionCommand<PinRequest, PinResponse>{
 		switch (super.iRequest.getAction()) {
 		// normale checkpin
 			case CHECKPIN:
-				return super.getResponse(CheckPinService.class);
-		//check utente esiste - usata per vedere se username gia in uso
-			case CHECKUTENTE:	
+				if(ObjectUtils.isEmpty(iRequest.getPin()) || ObjectUtils.isEmpty(iRequest.getBt())) 
+					throw new BaseActionException(ActErrors.INVALIDREQUEST);
 				
-		//creazione pin
-			case CREAZIONEPIN:
+				return super.getResponse(CheckPinService.class);		
 		//cambio pin
 			case CAMBIOPIN:	
+				
+			case RECUPERAPIN:
 	
 		default:
 			return super.throwDefault();

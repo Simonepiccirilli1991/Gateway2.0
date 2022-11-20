@@ -5,10 +5,9 @@ import com.gwsm0.model.base.BaseActionResponse;
 import lombok.Data;
 
 @Data
-public class PinResponse extends BaseActionResponse{
+public class LoginResponse extends BaseActionResponse{
 
-	private boolean pinOk;
-	private boolean checkDataNascita;
-	
+	private String msg;
+	private Boolean dataRichiesta;
 	
 }

@@ -15,6 +15,7 @@ public class SecuretySessionFrag {
 
 	WebClient webClient = WebClient.create("http://localhost:8083");
 	
+	// get
 	public SessionSecResponse getSessionSec(SessionSecRequest request) {
 	
 	Mono<SessionSecResponse> sessionDTO = webClient.post()
@@ -29,6 +30,21 @@ public class SecuretySessionFrag {
 	
 	return response;
 	}
+	// create
+	public SessionSecResponse createSessionSec(SessionSecRequest request) {
+		
+		Mono<SessionSecResponse> sessionDTO = webClient.post()
+				.uri("/session/create")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.body(Mono.just(request), SessionSecRequest.class)
+				.retrieve()
+				.bodyToMono(SessionSecResponse.class);
+		
+		
+		SessionSecResponse response = sessionDTO.share().block();
+		
+		return response;
+		}
 	
 	
 }

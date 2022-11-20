@@ -15,7 +15,6 @@ public class AnagraficaCommand extends BaseActionCommand<AnagraficaRequest, Anag
 
 	public AnagraficaCommand(AnagraficaRequest iRequest, HttpHeaders httpHeaders) {
 		super(iRequest, httpHeaders);
-		// TODO Auto-generated constructor stub
 	}
 
 	

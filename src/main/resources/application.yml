@@ -18,7 +18,7 @@ server:
 configuration:
 
   wiam:
-   end-point: ${WIAM0_ENDPOINT:https://localhost8081/wiam0}
+   end-point: ${WIAM0_ENDPOINT:http://localhost:8083/wiam}
     
   cach0:
     end-point: ${CACH0_ENDPOINT:https://localhost8082/cach0}
