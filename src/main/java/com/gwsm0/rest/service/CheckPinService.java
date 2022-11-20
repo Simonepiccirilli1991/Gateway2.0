@@ -46,7 +46,7 @@ public class CheckPinService extends BaseActionService<PinRequest, PinResponse>{
 		oResponse.getSessionData().getSession().setActionId(ActionConstants.SENDOTPMAIL.getId());
 		oResponse.setPinOk(true);
 		
-		return null;
+		return oResponse;
 	}
 
 }

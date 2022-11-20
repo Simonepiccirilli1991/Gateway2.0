@@ -242,5 +242,8 @@ public class ActionControllerTest {
 				oResponse.setAnagrafica(anagWiam.addAnagrafica(anagrafica).getAnagrafica());
 				assertThat(oResponse.getAnagrafica().getCodiceFiscale()).isSameAs("PCCRV");
 	}
+	
+	// checkPin COntrolelr test
+	
 
 }
