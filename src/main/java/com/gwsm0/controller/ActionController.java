@@ -1,5 +1,6 @@
 package com.gwsm0.controller;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gwsm0.command.AnagraficaCommand;
+import com.gwsm0.command.PinCommand;
 import com.gwsm0.command.StatusCommand;
 import com.gwsm0.command.UtenteCommand;
 import com.gwsm0.constants.ActErrors;
@@ -60,12 +62,10 @@ public class ActionController {
 	}
 	
 	@RequestMapping("pin")
-	public PinResponse pin(@RequestBody PinRequest request, @RequestHeader HttpHeaders header) {
+	public PinResponse pin(@RequestBody PinRequest request, @RequestHeader HttpHeaders header) throws Exception {
 		
-		
-		
-		
-		return null;
+		return beanFactory.getBean(PinCommand.class, request, header).doExecute();
+
 	}
 	@RequestMapping("login")
 	public LoginResponse login(@RequestBody LoginRequest request, @RequestHeader HttpHeaders header) {
