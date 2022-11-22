@@ -9,6 +9,7 @@ public class PinResponse extends BaseActionResponse{
 
 	private boolean pinOk;
 	private boolean checkDataNascita;
+	private Boolean pinChanged;
 	
 	
 }

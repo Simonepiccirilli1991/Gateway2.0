@@ -13,6 +13,7 @@ public class PinRequest extends BaseActionRequest{
 	private String email;
 	private String cf;
 	private String otp;
+	private String newPin;
 	
 	
 	

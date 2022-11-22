@@ -48,9 +48,9 @@ import com.gwsm0.rest.fragment.wiam.AnagraficaWiam;
 import com.gwsm0.rest.fragment.wiam.CheckPinWiam;
 import com.gwsm0.rest.fragment.wiam.EnforcementWiam;
 import com.gwsm0.rest.fragment.wiam.StatusWiam;
-import com.gwsm0.rest.service.AnagraficaAddService;
 import com.gwsm0.rest.service.EnforcementService;
 import com.gwsm0.rest.service.StatusService;
+import com.gwsm0.rest.service.anagrafica.AnagraficaAddService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -278,8 +278,6 @@ public class ActionControllerTest {
 		when(pinWiam.checkPin(any(PinWiamRequest.class))).thenReturn(new PinWiamResponse());
 		
 		when(secSession.createSessionSec(any(SessionSecRequest.class))).thenReturn(new SessionSecResponse());
-		
-		HttpHeaders header = new HttpHeaders();
 		
 		String mock =  mvc.perform(post("/action/pin")
 				.contentType("application/json")

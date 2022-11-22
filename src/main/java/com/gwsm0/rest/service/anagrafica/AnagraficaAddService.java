@@ -1,4 +1,4 @@
-package com.gwsm0.rest.service;
+package com.gwsm0.rest.service.anagrafica;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.gwsm0.model.request.AnagraficaRequest;
 import com.gwsm0.model.response.AnagraficaResponse;
-import com.gwsm0.rest.service.AnagraficaAddService;
-import com.gwsm0.rest.service.AnagraficaModService;
+import com.gwsm0.rest.service.anagrafica.AnagraficaAddService;
+import com.gwsm0.rest.service.anagrafica.AnagraficaModService;
 
 @Component
 @Scope("prototype")

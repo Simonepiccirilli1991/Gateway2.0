@@ -9,7 +9,7 @@ import com.gwsm0.constants.ActErrors;
 import com.gwsm0.error.handler.BaseActionException;
 import com.gwsm0.model.request.PinRequest;
 import com.gwsm0.model.response.PinResponse;
-import com.gwsm0.rest.service.CheckPinService;
+import com.gwsm0.rest.service.pin.CheckPinService;
 
 @Component
 @Scope("prototype")

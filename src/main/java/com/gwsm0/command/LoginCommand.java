@@ -5,7 +5,7 @@ import org.springframework.http.HttpHeaders;
 import com.gwsm0.model.request.LoginRequest;
 import com.gwsm0.model.response.LoginResponse;
 import com.gwsm0.model.response.PinResponse;
-import com.gwsm0.rest.service.CheckPinService;
+import com.gwsm0.rest.service.pin.CheckPinService;
 
 public class LoginCommand extends BaseActionCommand<LoginRequest,LoginResponse>{
 

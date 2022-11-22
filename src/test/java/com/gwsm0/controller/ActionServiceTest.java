@@ -30,7 +30,7 @@ import com.gwsm0.model.request.PinRequest;
 import com.gwsm0.model.response.PinResponse;
 import com.gwsm0.rest.fragment.session.SecuretySessionFrag;
 import com.gwsm0.rest.fragment.wiam.CheckPinWiam;
-import com.gwsm0.rest.service.CheckPinService;
+import com.gwsm0.rest.service.pin.CheckPinService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,7 +43,7 @@ public class ActionServiceTest {
 	@MockBean
 	SecuretySessionFrag secSession;
 
-	
+	//checkpin
 	@Test
 	public void checkPinServiceOK() {
 		
