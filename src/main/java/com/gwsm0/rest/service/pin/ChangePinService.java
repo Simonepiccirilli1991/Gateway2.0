@@ -13,10 +13,13 @@ import com.gwsm0.fragment.model.session.SessionSecResponse;
 import com.gwsm0.fragment.model.wiam.PinWiamRequest;
 import com.gwsm0.fragment.model.wiam.PinWiamResponse;
 import com.gwsm0.model.base.BaseActionService;
+import com.gwsm0.model.request.OtpRequest;
 import com.gwsm0.model.request.PinRequest;
 import com.gwsm0.model.response.PinResponse;
 import com.gwsm0.rest.fragment.session.SecuretySessionFrag;
 import com.gwsm0.rest.fragment.wiam.ChangePinWiam;
+import com.gwsm0.rest.service.otp.CheckOtpService;
+import com.gwsm0.rest.service.otp.GenerateOtpService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +30,9 @@ public class ChangePinService extends BaseActionService<PinRequest, PinResponse>
 	@Autowired
 	ChangePinWiam changePinWiam;
 	@Autowired
-	SecuretySessionFrag secSession;;
+	SecuretySessionFrag secSession;
+	@Autowired
+	CheckOtpService checkOtpService;
 
 	@Override
 	public PinResponse call_(PinRequest iRequest, HttpHeaders httpHeaders) {
@@ -52,8 +57,14 @@ public class ChangePinService extends BaseActionService<PinRequest, PinResponse>
 			throw new BaseActionException("No sec session , and no otp provided", HttpStatus.UNAUTHORIZED);
 		else if(!ObjectUtils.isEmpty(secResp) && !secResp.getScope().equals("L2") 
 				|| !ObjectUtils.isEmpty(iRequest.getOtp())) {
-			//checkOtp fare checkOtp
-			//TODO implementare checkOtp
+			OtpRequest otpReq = new OtpRequest();
+			otpReq.setBt(iRequest.getBt());
+			otpReq.setEmail(iRequest.getEmail());
+			otpReq.setProfile("WEB");
+			otpReq.setTrxId(httpHeaders.getFirst("trxId"));
+			otpReq.setSessionId(iRequest.getSessionId());
+			checkOtpService.call_(otpReq, httpHeaders);
+			
 		}
 
 

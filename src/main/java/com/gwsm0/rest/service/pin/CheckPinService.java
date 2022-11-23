@@ -40,9 +40,11 @@ public class CheckPinService extends BaseActionService<PinRequest, PinResponse>{
 		secRequest.setBt(iRequest.getBt());
 		secRequest.setScope("L1");
 		secRequest.setUsername(iRequest.getUsername());
-		secSession.createSessionSec(secRequest);
+		String sessionId = secSession.createSessionSec(secRequest).getSessionId();
 		
+		oResponse.setSessionId(sessionId);
 		oResponse.setAction(ActionConstants.SENDOTPMAIL);
+		oResponse.getSessionData().getSession().setSessionId(sessionId);
 		oResponse.getSessionData().getSession().setActionId(ActionConstants.SENDOTPMAIL.getId());
 		oResponse.setPinOk(true);
 		

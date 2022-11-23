@@ -10,6 +10,8 @@ public class OtpRequest extends BaseActionRequest{
 	private String ots;
 	private String email;
 	private String bt;
+	private String profile;
+	private String trxId;
 	
 	
 }

@@ -14,37 +14,51 @@ import reactor.core.publisher.Mono;
 public class SecuretySessionFrag {
 
 	WebClient webClient = WebClient.create("http://localhost:8083");
-	
+
 	// get
 	public SessionSecResponse getSessionSec(SessionSecRequest request) {
-	
-	Mono<SessionSecResponse> sessionDTO = webClient.post()
-			.uri("/session/get")
-			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-			.body(Mono.just(request), SessionSecRequest.class)
-			.retrieve()
-			.bodyToMono(SessionSecResponse.class);
-	
-	
-	SessionSecResponse response = sessionDTO.share().block();
-	
-	return response;
+
+		Mono<SessionSecResponse> sessionDTO = webClient.post()
+				.uri("/session/get")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.body(Mono.just(request), SessionSecRequest.class)
+				.retrieve()
+				.bodyToMono(SessionSecResponse.class);
+
+
+		SessionSecResponse response = sessionDTO.share().block();
+
+		return response;
 	}
 	// create
 	public SessionSecResponse createSessionSec(SessionSecRequest request) {
-		
+
 		Mono<SessionSecResponse> sessionDTO = webClient.post()
 				.uri("/session/create")
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.body(Mono.just(request), SessionSecRequest.class)
 				.retrieve()
 				.bodyToMono(SessionSecResponse.class);
-		
-		
+
+
 		SessionSecResponse response = sessionDTO.share().block();
-		
+
 		return response;
-		}
-	
+	}
+	// update
+	public  SessionSecResponse update(SessionSecRequest request,String sessionId) {
+
+		Mono<SessionSecResponse> sessionDTO = webClient.post()
+				.uri("/session/update")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.body(Mono.just(request), SessionSecRequest.class)
+				.retrieve()
+				.bodyToMono(SessionSecResponse.class);
+
+
+		SessionSecResponse response = sessionDTO.share().block();
+
+		return response;
+	}
 	
 }
