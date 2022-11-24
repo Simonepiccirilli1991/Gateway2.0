@@ -49,7 +49,7 @@ public class ChangePinService extends BaseActionService<PinRequest, PinResponse>
 		try {
 			secResp = secSession.getSessionSec(secReq);
 		}catch(Exception e) {
-			log.info("Error on retriving securety session, try to use otp");
+			//log.info("Error on retriving securety session, try to use otp");
 		}
 
 		if(ObjectUtils.isEmpty(secResp) && ObjectUtils.isEmpty(iRequest.getOtp())
