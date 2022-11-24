@@ -9,6 +9,7 @@ import com.gwsm0.constants.ActErrors;
 import com.gwsm0.error.handler.BaseActionException;
 import com.gwsm0.model.request.OtpRequest;
 import com.gwsm0.model.request.OtpResponse;
+import com.gwsm0.rest.service.otp.CheckOtpService;
 import com.gwsm0.rest.service.otp.GenerateOtpService;
 
 @Component
@@ -22,20 +23,18 @@ public class OtpCommand extends BaseActionCommand<OtpRequest, OtpResponse>{
 
 	public OtpResponse doExecute() throws Exception {
 		switch (super.iRequest.getAction()) {
-		// normale checkpin
 		case SENDOTPMAIL:
 			if(ObjectUtils.isEmpty(iRequest.getBt()) || ObjectUtils.isEmpty(iRequest.getEmail())
 					|| ObjectUtils.isEmpty(iRequest.getProfile()))
 				throw new BaseActionException(ActErrors.INVALIDREQUEST);
 
 			return super.getResponse(GenerateOtpService.class);		
-			//cambio pin
 		case CHECKOTPMAIL:	
 			if(ObjectUtils.isEmpty(iRequest.getBt()) || ObjectUtils.isEmpty(iRequest.getProfile())
 					|| ObjectUtils.isEmpty(iRequest.getSessionId()) || ObjectUtils.isEmpty(iRequest.getOts()))
 				throw new BaseActionException(ActErrors.INVALIDREQUEST);
 
-			return super.getResponse(GenerateOtpService.class);		
+			return super.getResponse(CheckOtpService.class);		
 
 		default:
 			return super.throwDefault();

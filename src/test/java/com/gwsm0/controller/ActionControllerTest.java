@@ -37,25 +37,36 @@ import com.gwsm0.model.base.Session;
 import com.gwsm0.model.base.SessionData;
 import com.gwsm0.model.request.AnagraficaRequest;
 import com.gwsm0.model.request.EnforcementRequest;
+import com.gwsm0.model.request.OtpRequest;
+import com.gwsm0.model.request.OtpResponse;
 import com.gwsm0.model.request.PinRequest;
 import com.gwsm0.model.request.StatusRequest;
 import com.gwsm0.model.response.AnagraficaResponse;
 import com.gwsm0.model.response.EnforcementResponse;
 import com.gwsm0.model.response.PinResponse;
 import com.gwsm0.model.response.StatusResponse;
+import com.gwsm0.rest.fragment.otp.OtpComponentService;
 import com.gwsm0.rest.fragment.session.SecuretySessionFrag;
 import com.gwsm0.rest.fragment.wiam.AnagraficaWiam;
+import com.gwsm0.rest.fragment.wiam.ChangePinWiam;
 import com.gwsm0.rest.fragment.wiam.CheckPinWiam;
 import com.gwsm0.rest.fragment.wiam.EnforcementWiam;
 import com.gwsm0.rest.fragment.wiam.StatusWiam;
 import com.gwsm0.rest.service.EnforcementService;
 import com.gwsm0.rest.service.StatusService;
 import com.gwsm0.rest.service.anagrafica.AnagraficaAddService;
+import com.gwsm0.rest.service.otp.CheckOtpService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ActionControllerTest {
 	
+	@MockBean
+	OtpComponentService otpComponent;
+	@MockBean
+	ChangePinWiam changePinWiam;
+	@MockBean
+	CheckOtpService checkOtpService;
 	@MockBean
 	CheckPinWiam pinWiam;
 	@MockBean
@@ -288,7 +299,107 @@ public class ActionControllerTest {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		PinResponse response = mapper.readValue(mock, PinResponse.class);
-		assertThat(response.getAction().equals(ActionConstants.CONSENT));
+		assertThat(response.getAction()).isEqualTo(ActionConstants.SENDOTPMAIL);
+		
+	}
+	
+	// ChangePin test
+	@Test
+	public void changePinOK() throws Exception {
+		PinRequest request = new PinRequest();
+		request.setPin("1234");
+		request.setNewPin("123456");
+		request.setBt("bt");
+		request.setAction(ActionConstants.CAMBIOPIN);
+		request.setSessionData(new SessionData());
+		request.getSessionData().setSession(new Session());
+		request.setSessionId("sessionId");
+		
+		SessionSecResponse sessResp = new SessionSecResponse();
+		sessResp.setScope("L2");
+		
+		PinWiamResponse pinResp = new PinWiamResponse();
+		pinResp.setPinChanged(true);
+		when(secSession.getSessionSec(any(SessionSecRequest.class))).thenReturn(sessResp);
+		
+		when(changePinWiam.changePin(any(PinWiamRequest.class))).thenReturn(pinResp);
+		
+		String mock =  mvc.perform(post("/action/pin")
+				.contentType("application/json")
+				.content(objectMapper.writeValueAsString(request)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		PinResponse response = mapper.readValue(mock, PinResponse.class);
+		assertThat(response.getAction()).isEqualTo(ActionConstants.CONSENT);
+	}
+	
+	// SendOtp test
+	@Test
+	public void sendOtpOK() throws Exception {
+		
+		OtpRequest request = new OtpRequest();
+		request.setAction(ActionConstants.SENDOTPMAIL);
+		request.setBt("bt-prova");
+		request.setEmail("email");
+		request.setProfile("WEB");
+		request.setSessionId("12345");
+		request.setSessionData(new SessionData());
+		request.getSessionData().setSession(new Session());
+		
+		String  trxId = "1234";
+		
+		when(otpComponent.generaOtp(any(OtpRequest.class))).thenReturn(trxId);
+		
+		String mock =  mvc.perform(post("/action/otp")
+				.contentType("application/json")
+				.content(objectMapper.writeValueAsString(request)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		OtpResponse response = mapper.readValue(mock, OtpResponse.class);
+		assertThat(response.getAction()).isEqualTo(ActionConstants.CHECKOTPMAIL);
+		assertThat(response.getTrxId()).isEqualTo("1234");
+	}
+	
+	@Test
+	public void checkOtpOK() throws Exception {
+		
+		OtpRequest request = new OtpRequest();
+		request.setAction(ActionConstants.CHECKOTPMAIL);
+		request.setBt("bt-prova");
+		request.setEmail("email");
+		request.setProfile("WEB");
+		request.setSessionId("12345");
+		request.setOts("1111");
+		request.setTrxId("12345");
+		request.setSessionData(new SessionData());
+		request.getSessionData().setSession(new Session());
+		
+		OtpResponse resp = new OtpResponse();
+		resp.setCodiceEsito("00");
+		
+		SessionSecResponse secResp = new SessionSecResponse();
+		secResp.setSessionId("12345");
+		
+		when(otpComponent.checkOtp(any(OtpRequest.class))).thenReturn(resp);
+		
+		when(secSession.update(any(SessionSecRequest.class), anyString())).thenReturn(secResp);
+		
+		String mock =  mvc.perform(post("/action/otp")
+				.contentType("application/json")
+				.content(objectMapper.writeValueAsString(request)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+//		OtpResponse response = mapper.readValue(mock, OtpResponse.class);
+//		assertThat(response.getAction()).isEqualTo(ActionConstants.CONSENT);
 		
 	}
 

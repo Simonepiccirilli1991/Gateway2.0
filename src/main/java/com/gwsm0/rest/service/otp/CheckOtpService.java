@@ -27,7 +27,7 @@ public class CheckOtpService extends BaseActionService<OtpRequest, OtpResponse>{
 	@Override
 	public OtpResponse call_(OtpRequest iRequest, HttpHeaders httpHeaders) {
 		
-		OtpResponse response = null;;
+		OtpResponse response = null;
 		try {
 			response= otpComponent.checkOtp(iRequest);
 		}catch(Exception e){
@@ -46,7 +46,7 @@ public class CheckOtpService extends BaseActionService<OtpRequest, OtpResponse>{
 		if(ObjectUtils.isEmpty(secResp))
 			throw new BaseActionException("Error on update current securety session", HttpStatus.FORBIDDEN);
 		// se sessione di sicurezza non esiste in l1 utente non puo essere arrivato qui
-		if(secResp.getSessionNoExist())
+		if(Boolean.TRUE.equals(secResp.getSessionNoExist()))
 			throw new BaseActionException("Error ri effettua login - mancata autorizzazione sicurezza l1", HttpStatus.UNAUTHORIZED);
 		
 		

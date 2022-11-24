@@ -5,12 +5,14 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gwsm0.command.AnagraficaCommand;
+import com.gwsm0.command.OtpCommand;
 import com.gwsm0.command.PinCommand;
 import com.gwsm0.command.StatusCommand;
 import com.gwsm0.command.UtenteCommand;
@@ -19,6 +21,8 @@ import com.gwsm0.error.handler.BaseActionException;
 import com.gwsm0.model.base.BaseActionResponse;
 import com.gwsm0.model.request.AnagraficaRequest;
 import com.gwsm0.model.request.LoginRequest;
+import com.gwsm0.model.request.OtpRequest;
+import com.gwsm0.model.request.OtpResponse;
 import com.gwsm0.model.request.PinRequest;
 import com.gwsm0.model.request.StatusRequest;
 import com.gwsm0.model.request.UtenteRequest;
@@ -67,10 +71,10 @@ public class ActionController {
 		return beanFactory.getBean(PinCommand.class, request, header).doExecute();
 
 	}
-	@RequestMapping("login")
-	public LoginResponse login(@RequestBody LoginRequest request, @RequestHeader HttpHeaders header) {
+	@PostMapping("otp")
+	public OtpResponse login(@RequestBody OtpRequest request, @RequestHeader HttpHeaders header) throws Exception {
 		
-		return null;
+		return beanFactory.getBean(OtpCommand.class, request, header).doExecute();
 	}
 
 }
