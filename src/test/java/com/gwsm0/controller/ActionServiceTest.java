@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -255,6 +257,39 @@ public class ActionServiceTest extends BaseTest{
 		OtpResponse response = otpCheckService.call_(request, null);
 
 		//assertThat(response.getAction()).isEqualTo(ActionConstants.CONSENT);
+	}
+	
+	// anagrafica
+	@Test
+	public void retriveAnagraficaTestOK() {
+		
+		AnagraficaWResponse iResp = new AnagraficaWResponse();
+		
+		AnagraficaWRequest anagrafica1 = new AnagraficaWRequest();
+		anagrafica1.setCodiceFiscale("cf");
+		anagrafica1.setCognome("prova");
+		anagrafica1.setComune("roma");
+		anagrafica1.setDataNascita("11/11/11");
+		anagrafica1.setNazionalità("bob");
+		anagrafica1.setNome("nome");
+		
+		AnagraficaWRequest anagrafica2 = new AnagraficaWRequest();
+		anagrafica2.setCodiceFiscale("cf2");
+		anagrafica2.setCognome("prova2");
+		anagrafica2.setComune("roma2");
+		anagrafica2.setDataNascita("11/11/112");
+		anagrafica2.setNazionalità("bob2");
+		anagrafica2.setNome("nome2");
+		
+		iResp.setListaAnagrafica(new ArrayList<>());
+		iResp.getListaAnagrafica().add(anagrafica2); 
+		iResp.getListaAnagrafica().add(anagrafica1); 
+		
+		when(anagWiam.getAllAnagbyNameoCf(anyString(), anyString())).thenReturn(iResp);
+		
+		AnagraficaResponse resp = retriveAnagService.retriveCodiceConto("", "", "prova");
+		
+		assertThat(resp.getAnagrafica().getCodiceFiscale()).isEqualTo("cf");
 	}
 
 }

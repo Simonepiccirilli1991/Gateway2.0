@@ -17,6 +17,7 @@ import com.gwsm0.rest.fragment.wiam.StatusWiam;
 import com.gwsm0.rest.service.EnforcementService;
 import com.gwsm0.rest.service.StatusService;
 import com.gwsm0.rest.service.anagrafica.AnagraficaAddService;
+import com.gwsm0.rest.service.anagrafica.RetriveAnagaficaService;
 import com.gwsm0.rest.service.otp.CheckOtpService;
 import com.gwsm0.rest.service.otp.GenerateOtpService;
 import com.gwsm0.rest.service.pin.ChangePinService;
@@ -58,6 +59,7 @@ public class BaseTest {
 	protected CheckPinService pinService;
 	@Autowired
 	protected ChangePinService changePinService;
-
+	@Autowired 
+	protected RetriveAnagaficaService retriveAnagService;
 	protected ObjectMapper mapper = new ObjectMapper();
 }

@@ -18,17 +18,18 @@ server:
 configuration:
 
   wiam:
-   end-point: ${WIAM0_ENDPOINT:http://localhost:8083/wiam}
-    
+   end-point-base: ${WIAM0_ENDPOINT:http://localhost:8083/wiam}
+   getAllAnagraficaWiam: ${WIAM0_GET_ANAG:http://localhost:8083/wiam/ag/get/{tiporicerca}/info/{valore}}
+   
   cach0:
-    end-point: ${CACH0_ENDPOINT:https://localhost8082/cach0}
+    end-point-base: ${CACH0_ENDPOINT:https://localhost8082/cach0}
     
   otpv0:
-    end-point: ${OTPV0_ENDPOINT:https://localhost8083/otpv0}
+    end-point-base: ${OTPV0_ENDPOINT:https://localhost8083/otpv0}
     
   docv0:
-    end-point: ${DOCV0_ENDPOINT:https://localhosto8083/docv0}
+    end-point-base: ${DOCV0_ENDPOINT:https://localhosto8083/docv0}
     
-    get-pdf: ${DOCV0_GETPDF:http://localhost:8080/docv0/getPdf}
+    get-pdf-base: ${DOCV0_GETPDF:http://localhost:8080/docv0/getPdf}
     
   

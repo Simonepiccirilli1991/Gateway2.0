@@ -1,9 +1,23 @@
 package com.gwsm0.fragment.model.wiam;
 
+import java.util.List;
+
 public class AnagraficaWResponse extends BaseWiamResponse{
 
 	
 	private AnagraficaWRequest Anagrafica;
+	
+	private List<AnagraficaWRequest> listaAnagrafica;
+	
+	
+
+	public List<AnagraficaWRequest> getListaAnagrafica() {
+		return listaAnagrafica;
+	}
+
+	public void setListaAnagrafica(List<AnagraficaWRequest> listaAnagrafica) {
+		this.listaAnagrafica = listaAnagrafica;
+	}
 
 	public AnagraficaWRequest getAnagrafica() {
 		return Anagrafica;

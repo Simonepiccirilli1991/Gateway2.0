@@ -24,7 +24,7 @@ import com.lowagie.text.pdf.PdfReader;
 public class DocumentFragment {
 
 	
-	@Value("${configuration.docv0.get-pdf}")
+	@Value("${configuration.docv0.end-point-base}")
 	private String getPdfUrl;
 	
 	RestTemplate restTemplate = new RestTemplate();

@@ -1,6 +1,8 @@
 package com.gwsm0.rest.fragment.wiam;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,7 +13,9 @@ import com.gwsm0.model.response.AnagraficaResponse;
 
 @Service
 public class AnagraficaWiam {
-
+	
+	@Value("${configuration.wiam.getAllAnagraficaWiam}")
+	private String getAllAnagEndPoint;
 	
 	RestTemplate restService = new RestTemplate();
 	// servizio per la get
@@ -54,5 +58,21 @@ public class AnagraficaWiam {
 		}
 		
 		return response;
+	}
+	
+	// get all by cf o nome
+	public AnagraficaWResponse getAllAnagbyNameoCf(String tiporicerca, String valore) {
+		
+		ResponseEntity<AnagraficaWResponse> response = null;
+		try {
+			response = restService.getForEntity(getAllAnagEndPoint, AnagraficaWResponse.class);
+		}catch(Exception e) {
+			throw new BaseActionException("Error on connecting wiam, error:" +e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		if(Boolean.TRUE.equals(response.getBody().getIsError()))
+			throw new BaseActionException("Error on connecting wiam, error:"+ response.getBody().getErrDsc(), HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		return response.getBody();
 	}
 }
