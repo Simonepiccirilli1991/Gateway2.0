@@ -14,7 +14,7 @@
 	<name>GWSM0-Gateway</name>
 	<description>seor GWSM0</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<itext.version>7.2.4</itext.version>
 	</properties>
 	<dependencies>

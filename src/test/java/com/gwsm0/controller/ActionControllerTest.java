@@ -62,6 +62,8 @@ import com.gwsm0.rest.service.otp.CheckOtpService;
 @AutoConfigureMockMvc
 public class ActionControllerTest extends BaseTest{
 	
+	@Autowired
+	MockMvc mvc;
 	// anagrafica
 	@Test
 	public void anagraficaGetOK() throws JsonProcessingException, Exception {

@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class CheckPinWiam {
 
-	@Value("${configuration.wiam.end-point}")
+	@Value("${configuration.wiam.end-point-base}")
 	private String wiamUri;
 	WebClient webClient = WebClient.create(wiamUri);
 

@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,6 +23,7 @@ import com.gwsm0.model.request.ContextRequest;
 import com.gwsm0.model.request.DocumentRequest;
 import com.gwsm0.model.request.EnforcementRequest;
 import com.gwsm0.model.request.LogoutRequest;
+import com.gwsm0.model.response.AnagraficaResponse;
 import com.gwsm0.model.response.ContextResponse;
 import com.gwsm0.model.response.DocumentResponse;
 import com.gwsm0.model.response.EnforcementResponse;
@@ -29,6 +32,7 @@ import com.gwsm0.rest.service.ContextService;
 import com.gwsm0.rest.service.DocumentiService;
 import com.gwsm0.rest.service.ItextService;
 import com.gwsm0.rest.service.LogoutService;
+import com.gwsm0.rest.service.anagrafica.RetriveAnagaficaService;
 
 
 
@@ -43,6 +47,8 @@ public class AppController {
 	DocumentiService docServ;
 	@Autowired
 	ItextService itextService;
+	@Autowired
+	RetriveAnagaficaService retriveService;
 	
 	// setto sicurezza, mappatura 1 a 1
 	@RequestMapping("scr/enforcement")
@@ -89,6 +95,18 @@ public class AppController {
 		
 	}
 	
+	@GetMapping("get/{tiporicerca}/info/{valore}/anag")
+	public AnagraficaResponse retriveAnag(@PathVariable (value = "tiporicerca") String tiporiceca,
+			@PathVariable (value = "valore") String valore,
+			@RequestHeader HttpHeaders header) {
+		
+		String cognome = header.getFirst("checks");
+		
+		if(ObjectUtils.isEmpty(cognome) || ObjectUtils.isEmpty(valore) || ObjectUtils.isEmpty(tiporiceca))
+			throw new BaseErrorException(HttpStatus.BAD_REQUEST, "INVALID_REQUEST");
+		
+		return retriveService.retriveCodiceConto(tiporiceca, valore, valore);
+	}
 	
 	@PostMapping("document")
 	public ResponseEntity<List<DocumentResponse>> document(@RequestBody DocumentRequest request) throws Exception{

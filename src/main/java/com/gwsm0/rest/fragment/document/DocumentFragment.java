@@ -1,6 +1,5 @@
 package com.gwsm0.rest.fragment.document;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.lowagie.text.pdf.PdfReader;
 
@@ -24,7 +22,7 @@ import com.lowagie.text.pdf.PdfReader;
 public class DocumentFragment {
 
 	
-	@Value("${configuration.docv0.end-point-base}")
+	@Value("${configuration.docv0.get-pdf-base}")
 	private String getPdfUrl;
 	
 	RestTemplate restTemplate = new RestTemplate();
